@@ -22,6 +22,8 @@ import 'package:flutter_grocery/view/base/web_app_bar/web_app_bar.dart';
 import 'package:flutter_grocery/view/base/web_product_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+
+import '../menu/menu_screen.dart';
 class CategoryProductScreenNew extends StatefulWidget {
   final CategoryModel categoryModel;
   final String subCategoryName;
@@ -254,8 +256,14 @@ class _CategoryProductScreenNewState extends State<CategoryProductScreenNew> {
           padding: EdgeInsets.symmetric(vertical: 20),
           child: InkWell(
             onTap: () {
-              Navigator.pop(context);
-              Provider.of<SplashProvider>(context, listen: false).setPageIndex(2);
+             // Navigator.pop(context);
+
+
+              Provider.of<SplashProvider>(context, listen: false).getsidBarClickTrue(false);
+              Provider.of<SplashProvider>(context, listen: false).setPageIndex(1);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => MenuScreen()));
+
+              // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => MenuScreen()));
             },
 
             child: Padding(

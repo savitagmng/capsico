@@ -5,6 +5,8 @@ import 'package:flutter_grocery/utill/images.dart';
 import 'package:flutter_grocery/view/screens/menu/menu_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../helper/route_helper.dart';
+
 class DetailsAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Key key;
   DetailsAppBar({this.key});
@@ -65,7 +67,8 @@ class DetailsAppBarState extends State<DetailsAppBar> with SingleTickerProviderS
                 ),
               ]),
               onPressed: () {
-                Provider.of<SplashProvider>(context, listen: false).setPageIndex(2);
+                Provider.of<SplashProvider>(context, listen: false).getsidBarClickTrue(false);
+                Provider.of<SplashProvider>(context, listen: false).setPageIndex(1);
                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => MenuScreen()));
               },
             ),

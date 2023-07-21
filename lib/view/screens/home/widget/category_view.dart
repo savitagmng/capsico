@@ -60,12 +60,13 @@ class _CategoryViewState extends State<CategoryView> {
                   onTap: () {
                     if (index == 5) {
 
-                      Provider.of<SplashProvider>(context, listen: false).getsidBarClickTrue(false);
+                    //  Provider.of<SplashProvider>(context, listen: false).getsidBarClickTrue(false);
 
                      /* Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const AllCategoryScreen()),
                       );*/
+                      Provider.of<CategoryProvider>(context, listen: false).changeSelectedIndex(-1,notify: false);
 
 
                       ResponsiveHelper.isMobilePhone() ?  Navigator.of(context).pushNamed(

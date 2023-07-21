@@ -33,7 +33,6 @@ import 'package:provider/provider.dart';
 import '../../../provider/search_provider.dart';
 import '../../base/custom_text_field.dart';
 import '../search/search_result_screen.dart';
-import '../search/search_screen.dart';
 
 List<MainScreenModel> screenList = [
   MainScreenModel(HomeScreen(), 'home', Images.home),
@@ -96,14 +95,12 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   TextEditingController _searchController = TextEditingController();
 
   final PageController _pageController = PageController();
   int _pageIndex = 0;
   List<Widget> _screens;
   GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey();
-
 
   @override
   void initState() {
@@ -150,17 +147,10 @@ class _MainScreenState extends State<MainScreen> {
               screenList
                   .removeWhere((menu) => menu.screen == _referMenu.screen);
               screenList.insert(9, _referMenu);
-
-
-
-
-
-
             }
 
             print("screen${screenList.length}");
             print("screen${screenList[0].screen}");
-
 
             return Consumer<LocationProvider>(
               builder: (context, locationProvider, child) => Scaffold(
@@ -234,12 +224,13 @@ class _MainScreenState extends State<MainScreen> {
                                           ),
                                         ]),
                                     onPressed: () {
-
-                                      splash
-                                          .getsidBarClickTrue(false);
+                                      splash.getsidBarClickTrue(false);
 
                                       print("call here cart values");
-                                      ResponsiveHelper.isMobilePhone()? splash.setPageIndex(1): Navigator.pushNamed(context, RouteHelper.cart);
+                                      ResponsiveHelper.isMobilePhone()
+                                          ? splash.setPageIndex(1)
+                                          : Navigator.pushNamed(
+                                              context, RouteHelper.cart);
                                     }),
                                 /*IconButton(
                                     icon: Icon(Icons.search,
@@ -255,80 +246,108 @@ class _MainScreenState extends State<MainScreen> {
                               ]
                             : splash.pageIndex == 2
                                 ? [
-                                    Center(child: Consumer<CartProvider>(
-                                        builder: (context, cartProvider, _) {
-                                      return Text(
-                                          '${cartProvider.cartList.length} ${getTranslated('items', context)}',
-                                          style: poppinsMedium.copyWith(
-                                              color: Theme.of(context)
-                                                  .primaryColor));
-                                    })),
+                                    InkWell(
+                                        child: Center(child:
+                                            Consumer<CartProvider>(
+                                                builder: (context,
+                                                    cartProvider, _) {
+                                          return Text(
+                                              '${cartProvider.cartList.length} ${getTranslated('items', context)}',
+                                              style:
+                                                  poppinsMedium.copyWith(
+                                                      color: Theme.of(
+                                                              context)
+                                                          .primaryColor));
+                                        })),
+                                        onTap: () {
+                                          splash.getsidBarClickTrue(false);
+
+                                          print("call here cart values");
+                                          ResponsiveHelper.isMobilePhone()
+                                              ? splash.setPageIndex(1)
+                                              : Navigator.pushNamed(
+                                                  context, RouteHelper.cart);
+                                        }),
                                     SizedBox(width: 20)
                                   ]
                                 : null,
                       ),
-                bottomNavigationBar:splash.sidBarClickTrue? BottomNavigationBar(
-                  selectedItemColor: Theme.of(context).primaryColor,
-                  unselectedItemColor: Colors.grey,
-                  showUnselectedLabels: true,
-                  currentIndex: _pageIndex,
-                  type: BottomNavigationBarType.fixed,
-                  items: [
-                    _barItem(Images.home, getTranslated('home', context), 0),
-                    _barItem(Images.list,
-                        getTranslated('All', context), 1),
-                    //   _barItem(Images.order_bag, getTranslated('shopping_bag', context), 2),
-                    //  _barItem(Images.order_bag, getTranslated('favourite', context), 3),
-                    _barItem(Images.order_list,
-                        getTranslated('my_order', context), 2),
-                    _barItem(
-                        Images.location, getTranslated('address', context), 3),
-                    _barItem(
-                        Images.coupon, getTranslated('coupon', context), 4),
-                    //   _barItem(Images.chat, getTranslated('live_chat', context), 7),
-                    //   _barItem(Images.settings, getTranslated('', context), 8),
-                  ],
-                  onTap: (int index) {
-                    _setPage(index);
-                  },
-                ):SizedBox(height: 0,),
-                body: splash.sidBarClickTrue?Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 50),
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: _screens.length,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return _screens[index];
+                bottomNavigationBar: splash.sidBarClickTrue
+                    ? BottomNavigationBar(
+                        selectedItemColor: Theme.of(context).primaryColor,
+                        unselectedItemColor: Colors.grey,
+                        showUnselectedLabels: true,
+                        currentIndex: _pageIndex,
+                        type: BottomNavigationBarType.fixed,
+                        items: [
+                          _barItem(
+                              Images.home, getTranslated('home', context), 0),
+                          _barItem(
+                              Images.list, getTranslated('All', context), 1),
+                          //   _barItem(Images.order_bag, getTranslated('shopping_bag', context), 2),
+                          //  _barItem(Images.order_bag, getTranslated('favourite', context), 3),
+                          _barItem(Images.order_list,
+                              getTranslated('my_order', context), 2),
+                          _barItem(Images.location,
+                              getTranslated('address', context), 3),
+                          _barItem(Images.coupon,
+                              getTranslated('coupon', context), 4),
+                          //   _barItem(Images.chat, getTranslated('live_chat', context), 7),
+                          //   _barItem(Images.settings, getTranslated('', context), 8),
+                        ],
+                        onTap: (int index) {
+                          _setPage(index);
                         },
+                      )
+                    : SizedBox(
+                        height: 0,
                       ),
-                    ),
-                    Container(
-                      child:  CustomTextField(
-                        hintText: getTranslated('search_item_here', context),
-                        isShowBorder: true,
-                        isShowPrefixIcon: true,
-                        prefixIconUrl: Icons.search,
-                        controller: _searchController,
-                        inputAction: TextInputAction.search,
-                        isIcon: true,
-                        onSubmit: (text) {
-                          if (_searchController.text.length > 0) {
-                            List<int> _encoded = utf8.encode(_searchController.text);
-                            String _data = base64Encode(_encoded);
-                            Provider.of<SearchProvider>(context, listen: false).saveSearchAddress(_searchController.text);
-                            Navigator.pushNamed(context, RouteHelper.searchResult+'?text=$_data', arguments: SearchResultScreen(searchString: _searchController.text));
-                            _searchController.text="";
-
-
-                          }
-                        },
-                      ),
-                    )
-                  ],
-                ):screenList[splash.pageIndex].screen,
+                body: splash.sidBarClickTrue
+                    ? Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: PageView.builder(
+                              controller: _pageController,
+                              itemCount: _screens.length,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return _screens[index];
+                              },
+                            ),
+                          ),
+                          Container(
+                            child: CustomTextField(
+                              hintText:
+                                  getTranslated('search_item_here', context),
+                              isShowBorder: true,
+                              isShowPrefixIcon: true,
+                              prefixIconUrl: Icons.search,
+                              controller: _searchController,
+                              inputAction: TextInputAction.search,
+                              isIcon: true,
+                              onSubmit: (text) {
+                                if (_searchController.text.length > 0) {
+                                  List<int> _encoded =
+                                      utf8.encode(_searchController.text);
+                                  String _data = base64Encode(_encoded);
+                                  Provider.of<SearchProvider>(context,
+                                          listen: false)
+                                      .saveSearchAddress(
+                                          _searchController.text);
+                                  Navigator.pushNamed(context,
+                                      RouteHelper.searchResult + '?text=$_data',
+                                      arguments: SearchResultScreen(
+                                          searchString:
+                                              _searchController.text));
+                                  _searchController.text = "";
+                                }
+                              },
+                            ),
+                          )
+                        ],
+                      )
+                    : screenList[splash.pageIndex].screen,
               ),
             );
           }),
