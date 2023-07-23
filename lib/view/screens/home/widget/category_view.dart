@@ -68,12 +68,9 @@ class _CategoryViewState extends State<CategoryView> {
 
                       print("call here cart values");
                       /*ResponsiveHelper.isMobilePhone()
-                          ?*/ Provider.of<SplashProvider>(context, listen: false).setPageIndex(4);
+                          ?*/
 
-                     /* ResponsiveHelper.isMobilePhone() ?  Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  AllCategoryScreen()),
-                      ): SizedBox();*/
+                      ResponsiveHelper.isMobilePhone() ?  Provider.of<SplashProvider>(context, listen: false).setPageIndex(4): SizedBox();
                       ResponsiveHelper.isWeb() ? Navigator.pushNamed(context, RouteHelper.categorys) : SizedBox();
 
                     } else {

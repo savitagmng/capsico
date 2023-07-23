@@ -19,11 +19,12 @@ class SplashProvider extends ChangeNotifier {
   bool _cookiesShow = true;
 
   var _sidBarClickTrue=true;
-
+  int _pageIndexBottomBar = 0;
 
   ConfigModel get configModel => _configModel;
   BaseUrls get baseUrls => _baseUrls;
   int get pageIndex => _pageIndex;
+  int get pageIndexBottomBar => _pageIndexBottomBar;
   bool get sidBarClickTrue => _sidBarClickTrue;
   bool get fromSetting => _fromSetting;
   bool get firstTimeConnectionCheck => _firstTimeConnectionCheck;
@@ -58,6 +59,10 @@ class SplashProvider extends ChangeNotifier {
 
   void setPageIndex(int index) {
     _pageIndex = index;
+    notifyListeners();
+  }
+  void setpageIndexBottomBar(int index) {
+    _pageIndexBottomBar = index;
     notifyListeners();
   }
 

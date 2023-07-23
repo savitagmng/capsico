@@ -100,7 +100,7 @@ class _MainScreenState extends State<MainScreen> {
 
   TextEditingController _searchController = TextEditingController();
 
-  final PageController _pageController = PageController();
+   PageController _pageController;
   int _pageIndex = 0;
   List<Widget> _screens;
   GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey();
@@ -109,7 +109,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-
+    _pageController = PageController();
     _screens = [
       HomeScreen(),
       AllCategoryScreen(),
@@ -124,9 +124,15 @@ class _MainScreenState extends State<MainScreen> {
 
     HomeScreen.loadData(true, Get.context);
   }
+  @override
+  void dispose() {
+    _pageController.dispose(); // Don't forget to dispose the PageController
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+
     print("call this screen");
 
     return Consumer<SplashProvider>(
@@ -275,7 +281,7 @@ class _MainScreenState extends State<MainScreen> {
                         selectedItemColor: Theme.of(context).primaryColor,
                         unselectedItemColor: Colors.grey,
                         showUnselectedLabels: true,
-                        currentIndex: _pageIndex,
+                        currentIndex: splash.pageIndexBottomBar,
                         type: BottomNavigationBarType.fixed,
                         items: [
                           _barItem(
@@ -310,14 +316,15 @@ class _MainScreenState extends State<MainScreen> {
                       child: splash.sidBarClickTrue
                           ? Stack(
                         children: [
-                          PageView.builder(
+                          _screens[splash.pageIndexBottomBar],
+                       /*   PageView.builder(
                             controller: _pageController,
                             itemCount: _screens.length,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               return _screens[index];
                             },
-                          ),
+                          ),*/
                           /* Container(
                                 child: CustomTextField(
                                   hintText:
@@ -393,9 +400,11 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   BottomNavigationBarItem _barItem(String icon, String label, int index) {
+
+    print("check data ${index} data${Provider.of<SplashProvider>(context, listen: false).pageIndexBottomBar}");
     return BottomNavigationBarItem(
       icon: Image.asset(icon,
-          color: index == _pageIndex
+          color: index == Provider.of<SplashProvider>(context, listen: false).pageIndexBottomBar
               ? Theme.of(context).primaryColor
               : Colors.grey,
           width: 25),
@@ -405,10 +414,18 @@ class _MainScreenState extends State<MainScreen> {
 
   void _setPage(int pageIndex) {
     setState(() {
+      Provider.of<SplashProvider>(context, listen: false).setpageIndexBottomBar(pageIndex);
+
       Provider.of<SplashProvider>(context, listen: false).getsidBarClickTrue(true);
       Provider.of<SplashProvider>(context, listen: false).setPageIndex(0);
+
+      if(_pageController==null)
+        {
+          _pageController = PageController();
+        }
       _pageController.jumpToPage(pageIndex);
-      _pageIndex = pageIndex;
+  //    _pageIndex = pageIndex;
+
     });
   }
 }
