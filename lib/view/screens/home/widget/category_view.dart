@@ -14,6 +14,8 @@ import 'package:flutter_grocery/view/screens/home/web/web_categories.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
+import '../../category/all_category_screen.dart';
+
 class CategoryView extends StatefulWidget {
   @override
   State<CategoryView> createState() => _CategoryViewState();
@@ -60,17 +62,18 @@ class _CategoryViewState extends State<CategoryView> {
                   onTap: () {
                     if (index == 5) {
 
+                      Provider.of<CategoryProvider>(context, listen: false).changeSelectedIndex(-1,notify: false);
                       Provider.of<SplashProvider>(context, listen: false).getsidBarClickTrue(false);
 
-                     /* Navigator.push(
+
+                      print("call here cart values");
+                      /*ResponsiveHelper.isMobilePhone()
+                          ?*/ Provider.of<SplashProvider>(context, listen: false).setPageIndex(4);
+
+                     /* ResponsiveHelper.isMobilePhone() ?  Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const AllCategoryScreen()),
-                      );*/
-
-
-                      ResponsiveHelper.isMobilePhone() ?  Navigator.of(context).pushNamed(
-                        RouteHelper.getCategoryProductsRouteNew(categoryModel: category.categoryList[index]),
-                      ): SizedBox();
+                        MaterialPageRoute(builder: (context) =>  AllCategoryScreen()),
+                      ): SizedBox();*/
                       ResponsiveHelper.isWeb() ? Navigator.pushNamed(context, RouteHelper.categorys) : SizedBox();
 
                     } else {

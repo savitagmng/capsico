@@ -41,6 +41,7 @@ List<MainScreenModel> screenList = [
   MainScreenModel(CartScreen(), 'shopping_bag', Images.order_bag),
   MainScreenModel(WishListScreen(), 'favourite', Images.favourite_icon),
   MainScreenModel(MyOrderScreen(), 'my_order', Images.order_list),
+  MainScreenModel(AllCategoryScreen(), 'all_categories', Images.list),
 //  MainScreenModel(AddressScreen(), 'address', Images.location),
   // MainScreenModel(CouponScreen(), 'coupon', Images.coupon),
   MainScreenModel(
@@ -267,47 +268,93 @@ class _MainScreenState extends State<MainScreen> {
                                   ]
                                 : null,
                       ),
-                bottomNavigationBar:splash.sidBarClickTrue? BottomNavigationBar(
-                  selectedItemColor: Theme.of(context).primaryColor,
-                  unselectedItemColor: Colors.grey,
-                  showUnselectedLabels: true,
-                  currentIndex: _pageIndex,
-                  type: BottomNavigationBarType.fixed,
-                  items: [
-                    _barItem(Images.home, getTranslated('home', context), 0),
-                    _barItem(Images.list,
-                        getTranslated('All', context), 1),
-                    //   _barItem(Images.order_bag, getTranslated('shopping_bag', context), 2),
-                    //  _barItem(Images.order_bag, getTranslated('favourite', context), 3),
-                    _barItem(Images.order_list,
-                        getTranslated('my_order', context), 2),
-                    _barItem(
-                        Images.location, getTranslated('address', context), 3),
-                    _barItem(
-                        Images.coupon, getTranslated('coupon', context), 4),
-                    //   _barItem(Images.chat, getTranslated('live_chat', context), 7),
-                    //   _barItem(Images.settings, getTranslated('', context), 8),
-                  ],
-                  onTap: (int index) {
-                    _setPage(index);
-                  },
-                ):SizedBox(height: 0,),
-                body: splash.sidBarClickTrue?Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 50),
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: _screens.length,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return _screens[index];
+
+
+                bottomNavigationBar: /*splash.sidBarClickTrue
+                    ?*/ BottomNavigationBar(
+                        selectedItemColor: Theme.of(context).primaryColor,
+                        unselectedItemColor: Colors.grey,
+                        showUnselectedLabels: true,
+                        currentIndex: _pageIndex,
+                        type: BottomNavigationBarType.fixed,
+                        items: [
+                          _barItem(
+                              Images.home, getTranslated('home', context), 0),
+                          _barItem(
+                              Images.list, getTranslated('All', context), 1),
+                          //   _barItem(Images.order_bag, getTranslated('shopping_bag', context), 2),
+                          //  _barItem(Images.order_bag, getTranslated('favourite', context), 3),
+                          _barItem(Images.order_list,
+                              getTranslated('my_order', context), 2),
+                          _barItem(Images.location,
+                              getTranslated('address', context), 3),
+                          _barItem(Images.coupon,
+                              getTranslated('coupon', context), 4),
+                          //   _barItem(Images.chat, getTranslated('live_chat', context), 7),
+                          //   _barItem(Images.settings, getTranslated('', context), 8),
+                        ],
+                        onTap: (int index) {
+
+                          print("which index call${index}");
+                          _setPage(index);
                         },
                       ),
+                   /* : SizedBox(
+                        height: 0,
+                      ),*/
+                body: Stack(
+                  children: [
+
+                    Padding(
+                      padding: const EdgeInsets.only(top: 50),
+                      child: splash.sidBarClickTrue
+                          ? Stack(
+                        children: [
+                          PageView.builder(
+                            controller: _pageController,
+                            itemCount: _screens.length,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return _screens[index];
+                            },
+                          ),
+                          /* Container(
+                                child: CustomTextField(
+                                  hintText:
+                                      getTranslated('search_item_here', context),
+                                  isShowBorder: true,
+                                  isShowPrefixIcon: true,
+                                  prefixIconUrl: Icons.search,
+                                  controller: _searchController,
+                                  inputAction: TextInputAction.search,
+                                  isIcon: true,
+                                  onSubmit: (text) {
+                                    if (_searchController.text.length > 0) {
+                                      List<int> _encoded =
+                                          utf8.encode(_searchController.text);
+                                      String _data = base64Encode(_encoded);
+                                      Provider.of<SearchProvider>(context,
+                                              listen: false)
+                                          .saveSearchAddress(
+                                              _searchController.text);
+                                      Navigator.pushNamed(context,
+                                          RouteHelper.searchResult + '?text=$_data',
+                                          arguments: SearchResultScreen(
+                                              searchString:
+                                                  _searchController.text));
+                                      _searchController.text = "";
+                                    }
+                                  },
+                                ),
+                              )*/
+                        ],
+                      )
+                          : screenList[splash.pageIndex].screen,
                     ),
                     Container(
-                      child:  CustomTextField(
-                        hintText: getTranslated('search_item_here', context),
+                      child: CustomTextField(
+                        hintText:
+                        getTranslated('search_item_here', context),
                         isShowBorder: true,
                         isShowPrefixIcon: true,
                         prefixIconUrl: Icons.search,
@@ -316,19 +363,27 @@ class _MainScreenState extends State<MainScreen> {
                         isIcon: true,
                         onSubmit: (text) {
                           if (_searchController.text.length > 0) {
-                            List<int> _encoded = utf8.encode(_searchController.text);
+                            List<int> _encoded =
+                            utf8.encode(_searchController.text);
                             String _data = base64Encode(_encoded);
-                            Provider.of<SearchProvider>(context, listen: false).saveSearchAddress(_searchController.text);
-                            Navigator.pushNamed(context, RouteHelper.searchResult+'?text=$_data', arguments: SearchResultScreen(searchString: _searchController.text));
-                            _searchController.text="";
-
-
+                            Provider.of<SearchProvider>(context,
+                                listen: false)
+                                .saveSearchAddress(
+                                _searchController.text);
+                            Navigator.pushNamed(context,
+                                RouteHelper.searchResult + '?text=$_data',
+                                arguments: SearchResultScreen(
+                                    searchString:
+                                    _searchController.text));
+                            _searchController.text = "";
                           }
                         },
                       ),
-                    )
+                    ),
+
                   ],
-                ):screenList[splash.pageIndex].screen,
+
+                ),
               ),
             );
           }),
@@ -350,6 +405,8 @@ class _MainScreenState extends State<MainScreen> {
 
   void _setPage(int pageIndex) {
     setState(() {
+      Provider.of<SplashProvider>(context, listen: false).getsidBarClickTrue(true);
+      Provider.of<SplashProvider>(context, listen: false).setPageIndex(0);
       _pageController.jumpToPage(pageIndex);
       _pageIndex = pageIndex;
     });
