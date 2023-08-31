@@ -601,26 +601,10 @@ packages:
     dependency: "direct main"
     description:
       name: geocoding
-      sha256: b34c0501bbbaf3190b85bef3078b27cf66c28a8915c6d3af50d67f356aa7da31
+      sha256: "0d7e4a15f1f9b9bc2b0a9898aab0e014ef0534a24e0d8ad73fedfaedd384ca3b"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
-  geocoding_android:
-    dependency: transitive
-    description:
-      name: geocoding_android
-      sha256: "5a1fc0cec9b0497b44ca31c1fa8d1c891f3aded1053e6bb2eac075d3bd1bf046"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
-  geocoding_ios:
-    dependency: transitive
-    description:
-      name: geocoding_ios
-      sha256: c85495ce8fb34e4fbd2dd8fc5f79263d622d9f88c4af948c965daf6b27a7f3a1
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
+    version: "2.0.4"
   geocoding_platform_interface:
     dependency: transitive
     description:
@@ -1073,10 +1057,10 @@ packages:
     dependency: "direct main"
     description:
       name: phone_number
-      sha256: "42cac4ca32146d83cc8a9c8432dc2d901d40334f0e2b02a3ec7d8237b80ebec3"
+      sha256: "653a96445844291f4b32261dfda183279b63f151ebf2a597c78a7d575e6c384d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "0.12.0+1"
   photo_view:
     dependency: "direct main"
     description:

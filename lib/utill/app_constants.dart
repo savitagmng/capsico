@@ -97,7 +97,7 @@ class AppConstants {
   static const String USER_ADDRESS = 'user_address';
 
   static const String SEARCH_ADDRESS = 'search_address';
-  static const String TOPIC = 'grofresh';
+  static const String TOPIC = 'Capsico';
   static const String ON_BOARDING_SKIP = 'on_boarding_skip';
   static const String PLACE_ORDER_DATA = 'place_order_data';
   static const String COOKIES_MANAGEMENT = 'cookies_management';

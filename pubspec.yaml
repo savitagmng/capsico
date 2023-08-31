@@ -41,7 +41,7 @@ dependencies:
   universal_html: ^2.0.9
   universal_ui: ^0.0.8
   flutter_widget_from_html_core: ^0.9.0
-  phone_number: ^1.0.0
+  phone_number:
   country_code_picker: ^2.0.2
   flutter_typeahead: ^4.0.0
   flutter_inappwebview: ^5.7.2+3

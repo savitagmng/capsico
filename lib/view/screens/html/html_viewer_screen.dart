@@ -54,6 +54,13 @@ class HtmlViewerScreen extends StatelessWidget {
         _data = _configModel.returnPolicy ?? '';
         _appBarText = 'return_policy';
         break;
+      case HtmlType.SHIPPING_ADDRESS:
+        _data = _configModel.shipping_address ?? '';
+        _appBarText = 'shipping_address';
+        break;
+
+
+
     }
 
 

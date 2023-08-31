@@ -43,14 +43,16 @@ class HomeItemView extends StatelessWidget {
                 },
             ) :
             SizedBox(
-              height: 290,
+             // height: 290,
+              height: 220,
               child: ListView.builder(
                 padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
                 itemCount: productList.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return Container(
-                    width: 195,
+                  //  width: 195,
+                    width: 150,
                     padding: EdgeInsets.all(5),
                     child: ProductWidget(
                       isGrid: true,

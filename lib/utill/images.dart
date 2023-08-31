@@ -26,7 +26,6 @@ class Images {
   static const String about_us = 'assets/image/about_us.png';
   static const String privacy = 'assets/image/privacy.png';
   static const String lock = 'assets/image/lock.png';
-  static const String grofresh_text = 'assets/image/GroFresh.png';
   static const String search = 'assets/image/search.png';
   static const String profile = 'assets/image/profile.png';
   static const String notification = 'assets/image/notification.png';

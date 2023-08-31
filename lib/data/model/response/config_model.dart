@@ -16,6 +16,7 @@ class ConfigModel {
   String _digitalPayment;
   List<Branches> _branches;
   String _termsAndConditions;
+  String _shipping_address;
   String _privacyPolicy;
   String _aboutUs;
   bool _emailVerification;
@@ -139,6 +140,7 @@ class ConfigModel {
     this._digitalPayment = digitalPayment;
     this._branches = branches;
     this._termsAndConditions = termsAndConditions;
+    this._shipping_address = shipping_address;
     this._aboutUs = aboutUs;
     this._privacyPolicy = privacyPolicy;
     this._emailVerification = emailVerification;
@@ -200,6 +202,7 @@ class ConfigModel {
   String get digitalPayment => _digitalPayment;
   List<Branches> get branches => _branches;
   String get termsAndConditions => _termsAndConditions;
+  String get shipping_address => _shipping_address;
   String get aboutUs=> _aboutUs;
   String get privacyPolicy=> _privacyPolicy;
   bool get emailVerification => _emailVerification;
@@ -272,6 +275,7 @@ class ConfigModel {
       });
     }
     _termsAndConditions = json['terms_and_conditions'];
+    _shipping_address = json['shipping_policy'];
     _privacyPolicy = json['privacy_policy'];
     _aboutUs = json['about_us'];
     _emailVerification = json['email_verification'];

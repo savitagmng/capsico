@@ -33,7 +33,6 @@ import 'package:provider/provider.dart';
 import '../../../provider/search_provider.dart';
 import '../../base/custom_text_field.dart';
 import '../search/search_result_screen.dart';
-import '../search/search_screen.dart';
 
 List<MainScreenModel> screenList = [
   MainScreenModel(HomeScreen(), 'home', Images.home),
@@ -85,6 +84,8 @@ List<MainScreenModel> screenList = [
         'cancellation_policy', Images.cancellation_policy),
 
   MainScreenModel(HtmlViewerScreen(htmlType: HtmlType.FAQ), 'faq', Images.faq),
+  MainScreenModel(HtmlViewerScreen(htmlType: HtmlType.SHIPPING_ADDRESS),
+      'shipping_address', Images.terms_and_conditions),
 ];
 
 class MainScreen extends StatefulWidget {
@@ -97,14 +98,12 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   TextEditingController _searchController = TextEditingController();
 
-   PageController _pageController;
+  PageController _pageController;
   int _pageIndex = 0;
   List<Widget> _screens;
   GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey();
-
 
   @override
   void initState() {
@@ -113,17 +112,14 @@ class _MainScreenState extends State<MainScreen> {
     _screens = [
       HomeScreen(),
       AllCategoryScreen(),
-      //CartScreen(),
-      //   WishListScreen(),
       MyOrderScreen(),
       AddressScreen(),
       CouponScreen(),
-      //   ChatScreen(orderModel: null),
-      //  SettingsScreen(),
     ];
 
     HomeScreen.loadData(true, Get.context);
   }
+
   @override
   void dispose() {
     _pageController.dispose(); // Don't forget to dispose the PageController
@@ -132,10 +128,20 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     print("call this screen");
 
-    return Consumer<SplashProvider>(
+
+    /*if(isStoreOpen())
+
+      {
+
+      }
+    else
+      {
+        creatDealPopupError();
+      }*/
+
+    return  Consumer<SplashProvider>(
       builder: (context, splash, child) {
         return WillPopScope(
           onWillPop: () async {
@@ -157,17 +163,10 @@ class _MainScreenState extends State<MainScreen> {
               screenList
                   .removeWhere((menu) => menu.screen == _referMenu.screen);
               screenList.insert(9, _referMenu);
-
-
-
-
-
-
             }
 
             print("screen${screenList.length}");
             print("screen${screenList[0].screen}");
-
 
             return Consumer<LocationProvider>(
               builder: (context, locationProvider, child) => Scaffold(
@@ -210,114 +209,111 @@ class _MainScreenState extends State<MainScreen> {
                                     fontSize: Dimensions.FONT_SIZE_LARGE,
                                     color: Theme.of(context).primaryColor),
                               ),
-                        actions: splash.pageIndex == 0
-                            ? [
-                                IconButton(
-                                    icon: Stack(
-                                        clipBehavior: Clip.none,
-                                        children: [
-                                          Image.asset(Images.cart_icon,
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1
-                                                  .color,
-                                              width: 25),
-                                          Positioned(
-                                            top: -7,
-                                            right: -2,
-                                            child: Container(
-                                              padding: EdgeInsets.all(3),
-                                              decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Theme.of(context)
-                                                      .primaryColor),
-                                              child: Text(
-                                                  '${Provider.of<CartProvider>(context).cartList.length}',
-                                                  style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .cardColor,
-                                                      fontSize: 10)),
-                                            ),
-                                          ),
-                                        ]),
-                                    onPressed: () {
-
-                                      splash
-                                          .getsidBarClickTrue(false);
-
-                                      print("call here cart values");
-                                      ResponsiveHelper.isMobilePhone()? splash.setPageIndex(1): Navigator.pushNamed(context, RouteHelper.cart);
-                                    }),
-                                /*IconButton(
-                                    icon: Icon(Icons.search,
-                                        size: 30,
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            .color),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, RouteHelper.searchProduct);
-                                    }),*/
-                              ]
-                            : splash.pageIndex == 2
+                        actions: isStoreOpen()
+                            ? splash.pageIndex == 0
                                 ? [
-                                    Center(child: Consumer<CartProvider>(
-                                        builder: (context, cartProvider, _) {
-                                      return Text(
-                                          '${cartProvider.cartList.length} ${getTranslated('items', context)}',
-                                          style: poppinsMedium.copyWith(
-                                              color: Theme.of(context)
-                                                  .primaryColor));
-                                    })),
-                                    SizedBox(width: 20)
+                                    IconButton(
+                                        icon: Stack(
+                                            clipBehavior: Clip.none,
+                                            children: [
+                                              Image.asset(Images.cart_icon,
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1
+                                                      .color,
+                                                  width: 25),
+                                              Positioned(
+                                                top: -7,
+                                                right: -2,
+                                                child: Container(
+                                                  padding: EdgeInsets.all(3),
+                                                  decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Theme.of(context)
+                                                          .primaryColor),
+                                                  child: Text(
+                                                      '${Provider.of<CartProvider>(context).cartList.length}',
+                                                      style: TextStyle(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .cardColor,
+                                                          fontSize: 10)),
+                                                ),
+                                              ),
+                                            ]),
+                                        onPressed: () {
+                                          splash.getsidBarClickTrue(false);
+
+                                          print("call here cart values");
+                                          ResponsiveHelper.isMobilePhone()
+                                              ? splash.setPageIndex(1)
+                                              : Navigator.pushNamed(
+                                                  context, RouteHelper.cart);
+                                        }),
                                   ]
-                                : null,
-                      ),
-
-
+                                : splash.pageIndex == 2
+                                    ? [
+                                        Center(child: Consumer<CartProvider>(
+                                            builder:
+                                                (context, cartProvider, _) {
+                                          return Text(
+                                              '${cartProvider.cartList.length} ${getTranslated('items', context)}',
+                                              style: poppinsMedium.copyWith(
+                                                  color: Theme.of(context)
+                                                      .primaryColor));
+                                        })),
+                                        SizedBox(width: 20)
+                                      ]
+                                    : null
+                            : [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Image(
+                                      height: 30,
+                                      width: 30,
+                                      image:
+                                          AssetImage("assets/image/close.png")),
+                                ),
+                              ]),
                 bottomNavigationBar: /*splash.sidBarClickTrue
-                    ?*/ BottomNavigationBar(
-                        selectedItemColor: Theme.of(context).primaryColor,
-                        unselectedItemColor: Colors.grey,
-                        showUnselectedLabels: true,
-                        currentIndex: splash.pageIndexBottomBar,
-                        type: BottomNavigationBarType.fixed,
-                        items: [
-                          _barItem(
-                              Images.home, getTranslated('home', context), 0),
-                          _barItem(
-                              Images.list, getTranslated('All', context), 1),
-                          //   _barItem(Images.order_bag, getTranslated('shopping_bag', context), 2),
-                          //  _barItem(Images.order_bag, getTranslated('favourite', context), 3),
-                          _barItem(Images.order_list,
-                              getTranslated('my_order', context), 2),
-                          _barItem(Images.location,
-                              getTranslated('address', context), 3),
-                          _barItem(Images.coupon,
-                              getTranslated('coupon', context), 4),
-                          //   _barItem(Images.chat, getTranslated('live_chat', context), 7),
-                          //   _barItem(Images.settings, getTranslated('', context), 8),
-                        ],
-                        onTap: (int index) {
-
-                          print("which index call${index}");
-                          _setPage(index);
-                        },
-                      ),
-                   /* : SizedBox(
+                    ?*/
+                    BottomNavigationBar(
+                  selectedItemColor: Theme.of(context).primaryColor,
+                  unselectedItemColor: Colors.grey,
+                  showUnselectedLabels: true,
+                  currentIndex: splash.pageIndexBottomBar,
+                  type: BottomNavigationBarType.fixed,
+                  items: [
+                    _barItem(Images.home, getTranslated('home', context), 0),
+                    _barItem(Images.list, getTranslated('All', context), 1),
+                    //   _barItem(Images.order_bag, getTranslated('shopping_bag', context), 2),
+                    //  _barItem(Images.order_bag, getTranslated('favourite', context), 3),
+                    _barItem(Images.order_list,
+                        getTranslated('my_order', context), 2),
+                    _barItem(
+                        Images.location, getTranslated('address', context), 3),
+                    _barItem(
+                        Images.coupon, getTranslated('coupon', context), 4),
+                    //   _barItem(Images.chat, getTranslated('live_chat', context), 7),
+                    //   _barItem(Images.settings, getTranslated('', context), 8),
+                  ],
+                  onTap: (int index) {
+                    print("which index call${index}");
+                    _setPage(index);
+                  },
+                ),
+                /* : SizedBox(
                         height: 0,
                       ),*/
                 body: Stack(
                   children: [
-
                     Padding(
                       padding: const EdgeInsets.only(top: 50),
                       child: splash.sidBarClickTrue
                           ? Stack(
-                        children: [
-                          _screens[splash.pageIndexBottomBar],
-                       /*   PageView.builder(
+                              children: [
+                                _screens[splash.pageIndexBottomBar],
+                                /*   PageView.builder(
                             controller: _pageController,
                             itemCount: _screens.length,
                             physics: NeverScrollableScrollPhysics(),
@@ -325,7 +321,7 @@ class _MainScreenState extends State<MainScreen> {
                               return _screens[index];
                             },
                           ),*/
-                          /* Container(
+                                /* Container(
                                 child: CustomTextField(
                                   hintText:
                                       getTranslated('search_item_here', context),
@@ -354,14 +350,13 @@ class _MainScreenState extends State<MainScreen> {
                                   },
                                 ),
                               )*/
-                        ],
-                      )
+                              ],
+                            )
                           : screenList[splash.pageIndex].screen,
                     ),
                     Container(
                       child: CustomTextField(
-                        hintText:
-                        getTranslated('search_item_here', context),
+                        hintText: getTranslated('search_item_here', context),
                         isShowBorder: true,
                         isShowPrefixIcon: true,
                         prefixIconUrl: Icons.search,
@@ -371,40 +366,112 @@ class _MainScreenState extends State<MainScreen> {
                         onSubmit: (text) {
                           if (_searchController.text.length > 0) {
                             List<int> _encoded =
-                            utf8.encode(_searchController.text);
+                                utf8.encode(_searchController.text);
                             String _data = base64Encode(_encoded);
-                            Provider.of<SearchProvider>(context,
-                                listen: false)
-                                .saveSearchAddress(
-                                _searchController.text);
+                            Provider.of<SearchProvider>(context, listen: false)
+                                .saveSearchAddress(_searchController.text);
                             Navigator.pushNamed(context,
                                 RouteHelper.searchResult + '?text=$_data',
                                 arguments: SearchResultScreen(
-                                    searchString:
-                                    _searchController.text));
+                                    searchString: _searchController.text));
                             _searchController.text = "";
                           }
                         },
                       ),
                     ),
-
                   ],
-
                 ),
               ),
             );
           }),
         );
       },
-    );
+    );/*:Scaffold(
+
+      body: Center(
+        child: WillPopScope(
+          onWillPop: () async {
+            return false;
+          },
+
+          child: Container(
+            decoration: BoxDecoration(color: Colors.black87
+              *//* image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: AssetImage(ImageRes().hole_popup_bg))*//*
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            height:180,
+
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            child: Card(
+              margin: const EdgeInsets.only(top: 25, bottom: 10),
+              elevation: 0,
+              //color: AppColor().wallet_dark_grey,
+              color: Colors.transparent,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 12, right: 12),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding:
+                      const EdgeInsets.only(left: 0, top: 10, bottom: 30),
+                      child: Image(
+                          height: 100,
+                          width: 80,
+                          image:
+                          AssetImage("assets/image/close.png")),
+                    ),
+                    *//* GestureDetector(
+                        onTap: () {
+                          // Get.offAll(() => DashBord(4, ""));
+                          Navigator.pop(navigatorKey.currentState.context);
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 35,
+                          margin: const EdgeInsets.only(
+                              left: 0, right: 0, top: 10, bottom: 10),
+                          width: MediaQuery.of(navigatorKey.currentState.context)
+                              .size
+                              .width -
+                              250,
+                          decoration: BoxDecoration(
+                          color: Colors.white,
+
+
+
+
+                            borderRadius: BorderRadius.circular(30),
+                            // color: AppColor().whiteColor
+                          ),
+                          child: const Text(
+                            "OK",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontFamily: "Nunito",
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),*//*
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );*/
   }
 
   BottomNavigationBarItem _barItem(String icon, String label, int index) {
-
-    print("check data ${index} data${Provider.of<SplashProvider>(context, listen: false).pageIndexBottomBar}");
+    print(
+        "check data ${index} data${Provider.of<SplashProvider>(context, listen: false).pageIndexBottomBar}");
     return BottomNavigationBarItem(
       icon: Image.asset(icon,
-          color: index == Provider.of<SplashProvider>(context, listen: false).pageIndexBottomBar
+          color: index ==
+                  Provider.of<SplashProvider>(context, listen: false)
+                      .pageIndexBottomBar
               ? Theme.of(context).primaryColor
               : Colors.grey,
           width: 25),
@@ -414,19 +481,110 @@ class _MainScreenState extends State<MainScreen> {
 
   void _setPage(int pageIndex) {
     setState(() {
-      Provider.of<SplashProvider>(context, listen: false).setpageIndexBottomBar(pageIndex);
+      Provider.of<SplashProvider>(context, listen: false)
+          .setpageIndexBottomBar(pageIndex);
 
-      Provider.of<SplashProvider>(context, listen: false).getsidBarClickTrue(true);
+      Provider.of<SplashProvider>(context, listen: false)
+          .getsidBarClickTrue(true);
       Provider.of<SplashProvider>(context, listen: false).setPageIndex(0);
 
-      if(_pageController==null)
-        {
-          _pageController = PageController();
-        }
+      if (_pageController == null) {
+        _pageController = PageController();
+      }
       _pageController.jumpToPage(pageIndex);
-  //    _pageIndex = pageIndex;
-
+      //    _pageIndex = pageIndex;
     });
+  }
+
+  bool isStoreOpen() {
+    DateTime now = DateTime.now();
+    DateTime storeCloseTime =
+        DateTime(now.year, now.month, now.day, 21, 0, 0); // 9 pm
+    DateTime storeOpenTime =
+        DateTime(now.year, now.month, now.day, 6, 0, 0); // 6 am
+
+    return now.isBefore(storeCloseTime) && now.isAfter(storeOpenTime);
+  }
+  void creatDealPopupError() {
+    showGeneralDialog(
+      context: navigatorKey.currentState.context,
+      barrierLabel: "Barrier",
+      barrierDismissible: true,
+      pageBuilder: (_, __, ___) {
+        return Center(
+          child: WillPopScope(
+            onWillPop: () async {
+              return false;
+            },
+
+            child: Container(
+              decoration: BoxDecoration(color: Colors.black87
+                /* image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage(ImageRes().hole_popup_bg))*/
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              height: 150,
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: Card(
+                margin: const EdgeInsets.only(top: 25, bottom: 10),
+                elevation: 0,
+                //color: AppColor().wallet_dark_grey,
+                color: Colors.transparent,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 12),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding:
+                        const EdgeInsets.only(left: 0, top: 10, bottom: 30),
+                        child: Image(
+                            height: 100,
+                            width: 80,
+                            image:
+                            AssetImage("assets/image/close.png")),
+                      ),
+                      /* GestureDetector(
+                      onTap: () {
+                        // Get.offAll(() => DashBord(4, ""));
+                        Navigator.pop(navigatorKey.currentState.context);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 35,
+                        margin: const EdgeInsets.only(
+                            left: 0, right: 0, top: 10, bottom: 10),
+                        width: MediaQuery.of(navigatorKey.currentState.context)
+                            .size
+                            .width -
+                            250,
+                        decoration: BoxDecoration(
+                        color: Colors.white,
+
+
+
+
+                          borderRadius: BorderRadius.circular(30),
+                          // color: AppColor().whiteColor
+                        ),
+                        child: const Text(
+                          "OK",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontFamily: "Nunito",
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),*/
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -437,3 +595,5 @@ class MainScreenModel {
 
   MainScreenModel(this.screen, this.title, this.icon);
 }
+
+
