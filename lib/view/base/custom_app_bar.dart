@@ -6,6 +6,12 @@ import 'package:flutter_grocery/utill/dimensions.dart';
 import 'package:flutter_grocery/utill/styles.dart';
 import 'package:provider/provider.dart';
 
+import '../../helper/responsive_helper.dart';
+import '../../helper/route_helper.dart';
+import '../../provider/cart_provider.dart';
+import '../../provider/splash_provider.dart';
+import '../../utill/images.dart';
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool isBackButtonExist;
@@ -27,25 +33,69 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ) : SizedBox(),
       backgroundColor: Theme.of(context).cardColor,
       elevation: isElevation?2:0,
-      actions: [
-        fromCategoryScreen ? PopupMenuButton(
-            color: ColorResources.getWhiteColor(context),
-            elevation: 20,
-            enabled: true,
-            icon: Icon(Icons.more_vert,color: Theme.of(context).textTheme.bodyText1.color,),
-            onSelected: (value) {
-              int _index = Provider.of<ProductProvider>(context,listen: false).allSortBy.indexOf(value);
-              Provider.of<ProductProvider>(context,listen: false).sortCategoryProduct(_index);
-            },
 
-            itemBuilder:(context) {
-              return Provider.of<ProductProvider>(context,listen: false).allSortBy.map((choice) {
-                return PopupMenuItem(
-                  value: choice,
-                  child: Text("$choice"),
-                );
-              }).toList();
-            }
+      actions: [
+        fromCategoryScreen ? Row(
+          children: [
+
+            IconButton(
+                icon: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Image.asset(Images.cart_icon,
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyText1
+                              .color,
+                          width: 25),
+                      Positioned(
+                        top: -7,
+                        right: -2,
+                        child: Container(
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Theme.of(context)
+                                  .primaryColor),
+                          child: Text(
+                              '${Provider.of<CartProvider>(context).cartList.length}',
+                              style: TextStyle(
+                                  color:
+                                  Theme.of(context)
+                                      .cardColor,
+                                  fontSize: 10)),
+                        ),
+                      ),
+                    ]),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Provider.of<SplashProvider>(context, listen: false).getsidBarClickTrue(false);
+
+                  Provider.of<SplashProvider>(context, listen: false).setPageIndex(1);
+
+
+
+                }),
+            PopupMenuButton(
+                color: ColorResources.getWhiteColor(context),
+                elevation: 20,
+                enabled: true,
+                icon: Icon(Icons.more_vert,color: Theme.of(context).textTheme.bodyText1.color,),
+                onSelected: (value) {
+                  int _index = Provider.of<ProductProvider>(context,listen: false).allSortBy.indexOf(value);
+                  Provider.of<ProductProvider>(context,listen: false).sortCategoryProduct(_index);
+                },
+
+                itemBuilder:(context) {
+                  return Provider.of<ProductProvider>(context,listen: false).allSortBy.map((choice) {
+                    return PopupMenuItem(
+                      value: choice,
+                      child: Text("$choice"),
+                    );
+                  }).toList();
+                }
+            ),
+          ],
         ) : SizedBox(),
       ],
     );
